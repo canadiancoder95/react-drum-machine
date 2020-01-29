@@ -1,0 +1,225 @@
+class DrumMachine extends React.Component {
+  constructor(props) {
+    super(props)
+		this.state = {
+			power: false,
+			volume: 0.5,
+			display: String.fromCharCode(160),
+			keyDownKick: false,
+			keyDownSnare: false,
+			keyDownCrash: false,
+			keyDownTom1: false,
+			keyDownTom2: false,
+			keyDownHiHat: false,			
+			
+		}
+		this.onKeyPress = this.onKeyPress.bind(this);
+		this.onKeyRelease = this.onKeyRelease.bind(this);
+		this.powerButton = this.powerButton.bind(this);
+		this.handleVolume = this.handleVolume.bind(this);
+		this.toggleClassKick = this.toggleClassKick.bind(this);
+		this.toggleClassSnare = this.toggleClassSnare.bind(this);
+		this.toggleClassTom1 = this.toggleClassTom1.bind(this);
+		this.toggleClassTom2 = this.toggleClassTom2.bind(this);
+		this.toggleClassHiHat = this.toggleClassHiHat.bind(this);
+		this.toggleClassCrash = this.toggleClassCrash.bind(this);		
+  };	
+	  componentDidMount() {
+			document.addEventListener('keydown', this.onKeyPress)
+			document.addEventListener('keyup', this.onKeyRelease)
+  }
+	  componentWillUnmount() {
+			document.removeEventListener('keydown', this.onKeyPress)
+			document.removeEventListener('keyup', this.onKeyRelease)			
+  }
+	
+	onKeyPress(e) {
+    if (e.keyCode === 86) { 
+       document.getElementById('bassdrum').play();
+			 document.getElementById('bassdrum').currentTime = 0;
+			 document.getElementById('bassdrum').volume = this.state.volume;
+			 this.toggleClassKick();
+		}; 
+		if (e.keyCode === 71) { 
+       document.getElementById('hihat').play();
+			 document.getElementById('hihat').currentTime = 0;
+			 document.getElementById('hihat').volume = this.state.volume;
+			 this.toggleClassHiHat();			
+		}; 
+		if (e.keyCode === 88) { 
+       document.getElementById('snaredrum').play();
+			 document.getElementById('snaredrum').currentTime = 0;
+			 document.getElementById('snaredrum').volume = this.state.volume;
+			 this.toggleClassSnare();			
+	  }; 
+		if (e.keyCode === 89) { 
+       document.getElementById('tom1').play();
+			 document.getElementById('tom1').currentTime = 0;
+			 document.getElementById('tom1').volume = this.state.volume;
+			 this.toggleClassTom1();			
+		}; 
+		if (e.keyCode === 85) { 
+       document.getElementById('tom2').play();
+			 document.getElementById('tom2').currentTime = 0;
+			 document.getElementById('tom2').volume = this.state.volume;
+			 this.toggleClassTom2();			
+		};
+		if (e.keyCode === 56) { 
+       document.getElementById('crashcymbal').play();
+			 document.getElementById('crashcymbal').currentTime = 0; 
+			 document.getElementById('crashcymbal').volume = this.state.volume;
+			 this.toggleClassCrash();			
+		};
+	}
+		onKeyRelease(e) {
+    if (e.keyCode === 86) { 
+			this.toggleClassKick();
+		}; 
+		if (e.keyCode === 71) { 
+      this.toggleClassHiHat();
+		}; 
+		if (e.keyCode === 88) { 
+      this.toggleClassSnare();
+	  }; 
+		if (e.keyCode === 89) { 
+      this.toggleClassTom1();
+		}; 
+		if (e.keyCode === 85) { 
+      this.toggleClassTom2();
+		};
+		if (e.keyCode === 56) { 
+      this.toggleClassCrash();
+		};			
+	}
+	
+	toggleClassKick() {
+		if (this.state.keyDownKick == false) {
+			this.setState({ keyDownKick: true });			
+		} else { 
+			this.setState({ keyDownKick : false })}
+	}	
+	
+	toggleClassSnare() {
+		if (this.state.keyDownSnare == false) {
+			this.setState({ keyDownSnare: true });			
+		} else { 
+			this.setState({ keyDownSnare : false })}
+	}	
+	
+	toggleClassHiHat() {
+		if (this.state.keyDownHiHat == false) {
+			this.setState({ keyDownHiHat: true });			
+		} else { 
+			this.setState({ keyDownHiHat : false })}
+	}	
+	
+	toggleClassTom1() {
+		if (this.state.keyDownTom1 == false) {
+			this.setState({ keyDownTom1: true });			
+		} else { 
+			this.setState({ keyDownTom1 : false })}
+	}	
+	
+	toggleClassTom2() {
+		if (this.state.keyDownTom2 == false) {
+			this.setState({ keyDownTom2: true });			
+		} else { 
+			this.setState({ keyDownTom2 : false })}
+	}	
+	
+	toggleClassCrash() {
+		if (this.state.keyDownCrash == false) {
+			this.setState({ keyDownCrash: true });			
+		} else { 
+			this.setState({ keyDownCrash : false })}
+	}	
+	
+	powerButton() {
+		if (this.state.power) {
+			this.setState({ power: false })
+		} else {
+			this.setState({ power: true })
+		}
+	};
+	
+	handleVolume(e) {
+		this.setState({
+			volume: e.target.value,
+		});		
+	}
+
+	
+  render() {
+		var buttonClass = ['power'];
+				console.log(this.state.keyDown);
+		if (this.state.power) {
+      buttonClass.push('On');
+    } else {
+			buttonClass.push('Off')
+		}    
+	console.log(this.state.keyDownKick)
+
+		return (
+      <div id='container' className='container'>
+				<div id='drumkeycontainer'>
+					<div className='row'>
+						<h6>ReactJS Drum Machine</h6>
+						<button className={buttonClass.join(' ')} onClick={this.powerButton}>Power</button>
+					</div>
+					<div className='row'>
+       	  	<div keyCode='86' id='bass' className={this.state.keyDownKick ? "keypressedkick" : "key"} onKeyUp={(e) => this.onKeyRelease(e)} onMouseDown={this.toggleClassKick} onMouseUp={this.toggleClassKick} onClick={() => {document.getElementById('bassdrum').play(); document.getElementById('bassdrum').currentTime = 0; document.getElementById('bassdrum').volume = this.state.volume;}}>
+							<kbd><b>V</b></kbd>
+							<br />
+          		<span className='sound'>Bass Drum</span>
+        		</div>
+						<div keyCode='71' id='hih' className={this.state.keyDownHiHat ? "keypressedhihat" : "key"} onKeyUp={(e) => this.onKeyRelease(e)} onMouseDown={this.toggleClassHiHat} onMouseUp={this.toggleClassHiHat} onClick={() => {document.getElementById('hihat').play(); document.getElementById('hihat').currentTime = 0; document.getElementById('hihat').volume = this.state.volume;}}>
+							<kbd><b>G</b></kbd>
+							<br />
+							<span className='sound'>Hi-Hat</span>
+						</div>
+						<div keyCode='88' id='snare' className={this.state.keyDownSnare ? "keypressedsnare" : "key"} onKeyUp={(e) => this.onKeyRelease(e)} onMouseDown={this.toggleClassSnare} onMouseUp={ this.toggleClassSnare} onClick={() => {document.getElementById('snaredrum').play(); document.getElementById('snaredrum').currentTime = 0; document.getElementById('snaredrum').volume = this.state.volume;}}>
+							<kbd><b>X</b></kbd>
+							<br />
+							<span className='sound'>Snare</span>
+						</div>
+					</div>
+					<div className='row'>
+						<div keyCode='89' id='t1' className={this.state.keyDownTom1 ? "keypressedtom1" : "key"} onKeyUp={(e) => this.onKeyRelease(e)} onMouseDown={this.toggleClassTom1} onMouseUp={ this.toggleClassTom1} onClick={() => {document.getElementById('tom1').play(); document.getElementById('tom1').currentTime = 0; document.getElementById('tom1').volume = this.state.volume;}}>
+							<kbd><b>Y</b></kbd>
+							<br />
+							<span className='sound'>Tom 1</span>
+						</div>
+						<div keyCode='85' id='t2' className={this.state.keyDownTom2 ? "keypressedtom2" : "key"} onKeyUp={(e) => this.onKeyRelease(e)} onMouseDown={this.toggleClassTom2} onMouseUp={ this.toggleClassTom2} onClick={() => {document.getElementById('tom2').play(); document.getElementById('tom2').currentTime = 0; document.getElementById('tom2').volume = this.state.volume;}}>
+							<kbd><b>U</b></kbd>
+							<br />
+							<span className='sound'>Tom 2</span>
+						</div>
+						<div keyCode='56' id='cc' className={this.state.keyDownCrash ? "keypressedcrash" : "key"} onKeyUp={(e) => this.onKeyRelease(e)} onMouseDown={this.toggleClassCrash} onMouseUp={ this.toggleClassCrash} onClick={() => {document.getElementById('crashcymbal').play(); document.getElementById('crashcymbal').currentTime = 0; document.getElementById('crashcymbal').volume = this.state.volume;}}>
+							<kbd><b>8</b></kbd>
+							<br />
+							<span className='sound'>Crash</span>
+						</div>						
+					</div>
+					<div className='row'>
+						<div className='slider-wrapper'>
+							<label>Volume
+							<input type="range" min='0' max='1' value={this.state.volume} onChange={this.handleVolume} step='0.01' />
+							</label>
+						</div>	
+					</div>
+				</div>
+				{/*links for audio elements obtained from www.findsounds.com */}
+				{this.state.power && <div id='audiocontainer'>
+					<audio id='bassdrum' keyCode='86' src='https://www.myinstants.com/media/sounds/bass-drum.mp3'></audio>
+					<audio id='hihat' keyCode='71' src='http://dight310.byu.edu/media/audio/FreeLoops.com/1/1/Alchemist%20HiHat%203-1788-Free-Loops.com.mp3'></audio>
+					<audio id='snaredrum' keyCode='88' src='https://www.myinstants.com/media/sounds/snare.mp3'></audio>
+					<audio id='tom1' keyCode='89' src='http://www.denhaku.com/r_box/sr16/sr16tom/loelectm.wav'></audio>
+					<audio id='tom2' keyCode='85' src='http://dight310.byu.edu/media/audio/FreeLoops.com/1/1/909%20Tom%20Low%2001-5859-Free-Loops.com.mp3'></audio>
+					<audio id='crashcymbal' keyCode='56' src='http://dight310.byu.edu/media/audio/FreeLoops.com/1/1/AT%20B%20Crash-1026-Free-Loops.com.mp3'></audio>
+				</div>}
+      </div>
+    );
+  };
+}
+
+ReactDOM.render(<DrumMachine />, document.getElementById('app'))
